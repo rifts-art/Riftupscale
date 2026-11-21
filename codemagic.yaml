@@ -1,0 +1,24 @@
+
+workflows:
+  rift-upscale-android:
+    name: Rift Upscale Android APK
+    max_build_duration: 120
+    instance_type: mac_mini_m2
+
+    scripts:
+      - name: Set Android SDK location
+        script: |
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/local.properties"
+
+      - name: Build Debug APK
+        script: |
+          if [ -f "./gradlew" ]; then
+            chmod +x ./gradlew
+            ./gradlew assembleDebug
+          else
+            gradle assembleDebug
+          fi
+
+    artifacts:
+      - app/build/outputs/**/*.apk
+      
